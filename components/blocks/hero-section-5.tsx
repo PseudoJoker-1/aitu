@@ -34,9 +34,9 @@ const COMPANY_LOGOS = [
 ]
 
 const VIDEO_SOURCES = [
-    '/FINAL 2.mp4',
-    '/Ардак.mp4',
-    '/сд 27 07 (1).mp4',
+    '/vid1.mp4',
+    '/vid2.mp4',
+    '/vid3.mp4',
 ]
 
 const VideoBackground = () => {
