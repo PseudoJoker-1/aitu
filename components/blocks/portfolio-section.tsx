@@ -6,33 +6,9 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FadeUp } from "@/components/ui/fade-up"
 import { cn } from "@/lib/utils"
-
-const projects = [
-    {
-        id: "01",
-        title: "Корпоративный форум",
-        description: "Масштабное мероприятие для 500+ участников с интерактивными зонами, выступлениями спикеров мирового уровня и networking-сессиями.",
-        image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1000&auto=format&fit=crop",
-    },
-    {
-        id: "02",
-        title: "Музыкальный фестиваль",
-        description: "Трехдневный open-air с участием 50+ артистов, фуд-кортами и арт-инсталляциями на территории более 10 гектаров.",
-        image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=1000&auto=format&fit=crop",
-    },
-    {
-        id: "03",
-        title: "Свадебное торжество",
-        description: "Эксклюзивная свадьба в исторической усадьбе с персонализированным декором, живой музыкой и авторским меню.",
-        image: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop",
-    },
-    {
-        id: "04",
-        title: "Бизнес-конференция",
-        description: "Международная конференция с синхронным переводом, онлайн-трансляцией и интерактивными воркшопами.",
-        image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=1000&auto=format&fit=crop",
-    },
-]
+// Turbo: Import centralized data
+import { projects } from "@/src/data"
+import Link from "next/link"
 
 const CYCLE_DURATION = 10000 // 10 seconds
 const TEXT_EXIT_TIME = 9200 // 9.2s
@@ -129,7 +105,7 @@ export function PortfolioSection() {
     }, [currentIndex, isTransitioning, textVisible, imageVisible, totalProjects])
 
     return (
-        <section className="w-full bg-white py-20 md:py-32 overflow-hidden">
+        <section id="portfolio" className="w-full bg-white py-20 md:py-32 overflow-hidden">
             <div className="container mx-auto px-4 md:px-6">
                 {/* Header with navigation */}
                 <div className="flex items-end justify-between mb-16">
@@ -183,7 +159,7 @@ export function PortfolioSection() {
                                         right: '-5%'
                                     }}
                                 >
-                                    {parseInt(currentProject.id).toString()}
+                                    {parseInt(currentProject.number).toString()}
                                 </motion.span>
                             </AnimatePresence>
 
@@ -205,7 +181,7 @@ export function PortfolioSection() {
                                         right: '-5%'
                                     }}
                                 >
-                                    {parseInt(currentProject.id).toString()}
+                                    {parseInt(currentProject.number).toString()}
                                 </motion.span>
                             </AnimatePresence>
                         </div>
@@ -225,14 +201,22 @@ export function PortfolioSection() {
                                         }}
                                     >
                                         <span className="text-sm font-medium text-gray-500 uppercase tracking-widest mb-4 block">
-                                            Проект {currentProject.id} / {String(totalProjects).padStart(2, '0')}
+                                            Проект {currentProject.number} / {String(totalProjects).padStart(2, '0')}
                                         </span>
-                                        <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-6">
-                                            {currentProject.title}
-                                        </h3>
-                                        <p className="text-lg text-gray-600 leading-relaxed">
+                                        <Link href={`/projects/${currentProject.id}`}>
+                                            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-6 hover:underline decoration-2 underline-offset-4 decoration-black/30 transition-all">
+                                                {currentProject.title}
+                                            </h3>
+                                        </Link>
+                                        <p className="text-lg text-gray-600 leading-relaxed mb-8">
                                             {currentProject.description}
                                         </p>
+
+                                        <Button asChild variant="outline" className="rounded-full border-black text-black hover:bg-black hover:text-white transition-colors">
+                                            <Link href={`/projects/${currentProject.id}`}>
+                                                Смотреть проект
+                                            </Link>
+                                        </Button>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -240,28 +224,30 @@ export function PortfolioSection() {
                     </div>
 
                     {/* Right side - Image */}
-                    <div className="relative h-[400px] md:h-[500px] lg:h-full rounded-3xl overflow-hidden">
-                        <AnimatePresence mode="wait">
-                            {imageVisible && (
-                                <motion.div
-                                    key={`image-${currentProject.id}`}
-                                    initial={{ y: 60, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    exit={{ y: -80, opacity: 0 }}
-                                    transition={{
-                                        duration: 0.6,
-                                        ease: [0.25, 0.46, 0.45, 0.94]
-                                    }}
-                                    className="absolute inset-0"
-                                >
-                                    <img
-                                        src={currentProject.image}
-                                        alt={currentProject.title}
-                                        className="w-full h-full object-cover origin-center"
-                                    />
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                    <div className="relative h-[400px] md:h-[500px] lg:h-full rounded-3xl overflow-hidden cursor-pointer group">
+                        <Link href={`/projects/${currentProject.id}`}>
+                            <AnimatePresence mode="wait">
+                                {imageVisible && (
+                                    <motion.div
+                                        key={`image-${currentProject.id}`}
+                                        initial={{ y: 60, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        exit={{ y: -80, opacity: 0 }}
+                                        transition={{
+                                            duration: 0.6,
+                                            ease: [0.25, 0.46, 0.45, 0.94]
+                                        }}
+                                        className="absolute inset-0"
+                                    >
+                                        <img
+                                            src={currentProject.image}
+                                            alt={currentProject.title}
+                                            className="w-full h-full object-cover origin-center transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </Link>
                     </div>
                 </div>
 

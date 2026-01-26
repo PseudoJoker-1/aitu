@@ -11,29 +11,7 @@ import {
 } from "@/components/ui/carousel"
 import { Button } from "@/components/ui/button"
 import { FadeUp } from "@/components/ui/fade-up"
-
-const services = [
-    {
-        title: "Корпоративные события",
-        image: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1000&auto=format&fit=crop",
-    },
-    {
-        title: "Масштабные фестивали",
-        image: "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?q=80&w=1000&auto=format&fit=crop",
-    },
-    {
-        title: "Частные праздники",
-        image: "https://images.unsplash.com/photo-1519671482502-9759101d4561?q=80&w=1000&auto=format&fit=crop",
-    },
-    {
-        title: "Конференции",
-        image: "https://images.unsplash.com/photo-1544531586-fde5298cdd40?q=80&w=1000&auto=format&fit=crop",
-    },
-    {
-        title: "Выставки",
-        image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=1000&auto=format&fit=crop"
-    }
-]
+import { services } from "@/src/data"
 
 export function ServicesSection() {
     const [api, setApi] = React.useState<CarouselApi>()
@@ -97,7 +75,7 @@ export function ServicesSection() {
     }, [api, current])
 
     return (
-        <section className="w-full bg-white py-16 md:py-20">
+        <section id="directions" className="w-full bg-white py-16 md:py-20">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 md:mb-16 gap-6">
                     <FadeUp>

@@ -3,34 +3,7 @@ import React, { useRef } from 'react'
 import { motion, useScroll, useTransform, MotionValue } from 'motion/react'
 import { cn } from '@/lib/utils'
 import { FadeUp } from '@/components/ui/fade-up'
-
-const steps = [
-    {
-        number: '01',
-        title: 'Звонок и бриф',
-        description: 'Мы начинаем с глубокого погружения в ваши задачи. Изучаем аудиторию, анализируем контекст и формируем четкое видение целей вашего события.'
-    },
-    {
-        number: '02',
-        title: 'Встреча и детали мероприятия',
-        description: 'На основе встречи мы обсуждаем все детали мероприятия и формируем четкое видение целей вашего события.'
-    },
-    {
-        number: '03',
-        title: 'Коммерческое предложение и смета',
-        description: 'Мы формируем детальное предложение после встречи, включающее визуализацию идей, смету и таймлайны.'
-    },
-    {
-        number: '04',
-        title: 'Составление договора',
-        description: 'Мы готовим договор и отправляем вам на ознакомление.'
-    },
-    {
-        number: '05',
-        title: 'Идеальное мероприятие',
-        description: 'Финальный аккорд. Мы не просто организуем событие, мы создаем атмосферу и эмоции, которые остаются в памяти надолго.'
-    }
-]
+import { processSteps } from '@/src/data'
 
 export function ProcessSection() {
     const targetRef = useRef<HTMLDivElement>(null)
@@ -46,6 +19,7 @@ export function ProcessSection() {
 
     return (
         <section
+            id="about"
             ref={targetRef}
             className="relative h-[500vh] bg-white text-black"
         >
@@ -87,13 +61,13 @@ export function ProcessSection() {
                         />
                     </div>
 
-                    {steps.map((step, index) => (
+                    {processSteps.map((step, index) => (
                         <StepItem
                             key={index}
                             step={step}
                             index={index}
                             parentScrollProgress={scrollYProgress}
-                            totalSteps={steps.length}
+                            totalSteps={processSteps.length}
                         />
                     ))}
                 </motion.div>
@@ -108,7 +82,7 @@ function StepItem({
     parentScrollProgress,
     totalSteps
 }: {
-    step: typeof steps[0],
+    step: typeof processSteps[0],
     index: number,
     parentScrollProgress: MotionValue,
     totalSteps: number
