@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { Menu, X, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import Image from 'next/image'
+import { FadeUp } from '@/components/ui/fade-up'
 import logo from '@/img/logo.png'
 import akimatLogo from '@/img/Akimat.png'
 import gormolzavodLogo from '@/img/Gormolzavod.jpg'
@@ -69,7 +70,7 @@ const VideoBackground = () => {
     const currentVideo = VIDEO_SOURCES[currentVideoIndex]
 
     return (
-        <div className="relative w-full max-w-[1280px] mx-auto aspect-[21/9] rounded-[40px] overflow-hidden shadow-2xl shadow-black/20">
+        <div className="relative w-full max-w-[1280px] mx-auto aspect-[9/10] md:aspect-[21/9] rounded-[40px] overflow-hidden shadow-2xl shadow-black/20">
             {/* Dark gradient overlay from bottom to top */}
             <div
                 className="absolute inset-0 z-10 pointer-events-none"
@@ -106,24 +107,16 @@ const VideoBackground = () => {
                             autoPlay
                             muted
                             playsInline
-                            className="absolute inset-0 w-full h-full object-cover"
-                            initial={{ scale: 1.05 }}
-                            animate={{
-                                scale: 1.0
-                            }}
-                            transition={{
-                                duration: 20,
-                                ease: 'linear'
-                            }}
+                            loop
+                            src={currentVideo}
+                            className="absolute inset-0 w-full h-full object-cover origin-center"
                             onEnded={handleVideoEnd}
                             onLoadedMetadata={(e) => {
                                 if (VIDEO_SOURCES[currentVideoIndex].includes('сд 27 07 (1).mp4')) {
                                     e.currentTarget.currentTime = 40
                                 }
                             }}
-                        >
-                            <source src={currentVideo} type="video/mp4" />
-                        </motion.video>
+                        />
                     </motion.div>
                 </AnimatePresence>
             )}
@@ -137,7 +130,7 @@ export function HeroSection() {
             <HeroHeader />
             <main className="overflow-x-hidden">
                 <section className="relative overflow-hidden bg-white">
-                    <div className="pt-12 md:pt-16 lg:pt-20 pb-0">
+                    <div className="pt-32 md:pt-16 lg:pt-20 pb-0">
                         <div className="relative mx-auto max-w-[1280px] px-6">
                             {/* Video Container */}
                             <div className="relative">
@@ -145,14 +138,9 @@ export function HeroSection() {
 
                                 {/* Text Content - Bottom Left */}
                                 <div className="absolute bottom-0 left-0 z-20 p-8 md:p-10 lg:p-12">
-                                    <h1
-                                        className="max-w-2xl text-balance text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4"
-                                        style={{
-                                            textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)'
-                                        }}
-                                    >
+                                    <FadeUp className="max-w-2xl text-balance text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 drop-shadow-2xl">
                                         Создаем незабываемые события
-                                    </h1>
+                                    </FadeUp>
 
                                     <div className="mt-6 flex flex-col sm:flex-row gap-3">
                                         <Button
@@ -193,7 +181,7 @@ export function HeroSection() {
                                     duration={40}
                                     gap={112}>
                                     {COMPANY_LOGOS.map((logo, index) => (
-                                        <div key={index} className="flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100">
+                                        <div key={index} className="flex items-center justify-center md:grayscale hover:grayscale-0 transition-all duration-300 opacity-100 md:opacity-70 hover:opacity-100">
                                             <Image
                                                 className="mx-auto h-12 w-auto object-contain"
                                                 src={logo.src}

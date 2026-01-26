@@ -10,6 +10,7 @@ import {
     type CarouselApi,
 } from "@/components/ui/carousel"
 import { Button } from "@/components/ui/button"
+import { FadeUp } from "@/components/ui/fade-up"
 
 const services = [
     {
@@ -99,9 +100,11 @@ export function ServicesSection() {
         <section className="w-full bg-white py-16 md:py-20">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 md:mb-16 gap-6">
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-sans font-bold text-black tracking-tight max-w-xl">
-                        Наши направления
-                    </h2>
+                    <FadeUp>
+                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-sans font-bold text-black tracking-tight max-w-xl">
+                            Наши направления
+                        </h2>
+                    </FadeUp>
 
                     <div className="flex gap-4">
                         <Button

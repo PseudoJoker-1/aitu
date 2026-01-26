@@ -4,6 +4,7 @@ import * as React from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { FadeUp } from "@/components/ui/fade-up"
 import { cn } from "@/lib/utils"
 
 const projects = [
@@ -132,9 +133,11 @@ export function PortfolioSection() {
             <div className="container mx-auto px-4 md:px-6">
                 {/* Header with navigation */}
                 <div className="flex items-end justify-between mb-16">
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black tracking-tight">
-                        Наши проекты
-                    </h2>
+                    <FadeUp>
+                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black tracking-tight">
+                            Наши проекты
+                        </h2>
+                    </FadeUp>
                     <div className="flex gap-4">
                         <Button
                             variant="outline"
@@ -175,7 +178,7 @@ export function PortfolioSection() {
                                         ease: [0.25, 0.46, 0.45, 0.94]
                                     }}
                                     className="absolute text-[20rem] md:text-[28rem] lg:text-[32rem] font-bold leading-none select-none"
-                                    style={{ 
+                                    style={{
                                         color: '#808080',
                                         right: '-5%'
                                     }}
@@ -254,7 +257,7 @@ export function PortfolioSection() {
                                     <img
                                         src={currentProject.image}
                                         alt={currentProject.title}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover origin-center"
                                     />
                                 </motion.div>
                             )}

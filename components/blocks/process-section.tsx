@@ -2,6 +2,7 @@
 import React, { useRef } from 'react'
 import { motion, useScroll, useTransform, MotionValue } from 'motion/react'
 import { cn } from '@/lib/utils'
+import { FadeUp } from '@/components/ui/fade-up'
 
 const steps = [
     {
@@ -38,13 +39,16 @@ export function ProcessSection() {
     })
 
     // Move content horizontally based on vertical scroll
-    const x = useTransform(scrollYProgress, [0, 1], ["0%", "-55%"])
+    const x = useTransform(scrollYProgress, [0, 1], ["0%", "-80%"])
 
     // Connecting line fills horizontally
     const lineWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
 
     return (
-        <section ref={targetRef} className="relative h-[300vh] bg-white text-black">
+        <section
+            ref={targetRef}
+            className="relative h-[500vh] bg-white text-black"
+        >
             {/* Sticky Container */}
             <div className="sticky top-0 flex h-screen items-center overflow-hidden">
 
@@ -64,16 +68,18 @@ export function ProcessSection() {
 
                 {/* Title */}
                 <div className="absolute top-12 left-6 md:left-12 z-20">
-                    <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
-                        Путь к<br />событию
-                    </h2>
+                    <FadeUp>
+                        <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
+                            Путь к<br />событию
+                        </h2>
+                    </FadeUp>
                 </div>
 
                 {/* Horizontal Scrolling Content */}
-                <motion.div style={{ x }} className="flex gap-24 pl-[10vw] pr-24 items-start relative z-10 pt-32">
+                <motion.div style={{ x }} className="flex gap-12 md:gap-24 pl-[10vw] pr-24 items-start relative z-10 pt-32">
 
                     {/* Connecting Line Container */}
-                    <div className="absolute top-[35%] left-[5vw] right-60 h-[1px] z-0">
+                    <div className="absolute top-[35%] left-[5vw] right-0 h-[1px] z-0">
                         <div className="absolute inset-0 bg-black/10 w-full" />
                         <motion.div
                             className="absolute top-0 left-0 bottom-0 bg-black"

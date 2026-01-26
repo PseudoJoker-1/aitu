@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react'
 import { motion, useSpring, useMotionValue, useTransform } from 'motion/react'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
+import { FadeUp } from '@/components/ui/fade-up'
 
 const EVENT_TYPES = [
     "Корпоратив",
@@ -29,9 +30,11 @@ export function CTASection() {
                     viewport={{ once: true }}
                     className="w-full max-w-4xl flex flex-col items-center text-center"
                 >
-                    <h2 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter mb-12 md:mb-16">
-                        Начнем ваш<br />проект?
-                    </h2>
+                    <FadeUp>
+                        <h2 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter mb-12 md:mb-16">
+                            Начнем ваш<br />проект?
+                        </h2>
+                    </FadeUp>
 
                     {/* Tags */}
                     <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12 md:mb-16">
@@ -43,8 +46,8 @@ export function CTASection() {
                                 transition={{ delay: index * 0.1, duration: 0.5 }}
                                 onClick={() => setActiveType(type)}
                                 className={`px-6 md:px-8 py-3 md:py-4 rounded-full border text-base md:text-lg transition-all duration-300 ${activeType === type
-                                        ? 'bg-black text-white border-black'
-                                        : 'bg-white text-black border-neutral-200 hover:border-black'
+                                    ? 'bg-black text-white border-black'
+                                    : 'bg-white text-black border-neutral-200 hover:border-black'
                                     }`}
                             >
                                 {type}

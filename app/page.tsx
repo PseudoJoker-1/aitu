@@ -6,7 +6,7 @@ import { CTASection } from "@/components/blocks/cta-section"
 
 export default function Home() {
   return (
-    <main>
+    <main className="bg-white">
       <HeroSection />
       <ServicesSection />
       <PortfolioSection />
