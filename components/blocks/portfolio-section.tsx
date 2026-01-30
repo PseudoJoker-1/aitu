@@ -6,14 +6,36 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FadeUp } from "@/components/ui/fade-up"
 import { cn } from "@/lib/utils"
-// Turbo: Import centralized data
-import { projects } from "@/src/data"
+import { projects as staticProjects, Project } from "@/src/data"
 import Link from "next/link"
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
 const CYCLE_DURATION = 10000 // 10 seconds
 const TEXT_EXIT_TIME = 9200 // 9.2s
 const NUMBER_ROLL_TIME = 9400 // 9.4s  
 const IMAGE_EXIT_TIME = 9600 // 9.6s
+
+// Transform API project to the format expected by the component
+function transformApiProject(apiProject: any, index: number): Project {
+    const firstImage = apiProject.images && apiProject.images.length > 0
+        ? apiProject.images[0].image
+        : '';
+    const imageUrl = firstImage.startsWith('http')
+        ? firstImage
+        : `${API_BASE_URL}${firstImage}`;
+
+    return {
+        id: apiProject.slug || apiProject.id,
+        slug: apiProject.slug,
+        number: String(index + 1).padStart(2, '0'),
+        title: apiProject.title,
+        description: apiProject.description,
+        image: imageUrl,
+        images: apiProject.images,
+        content: apiProject.description,
+    };
+}
 
 export function PortfolioSection() {
     const [currentIndex, setCurrentIndex] = React.useState(0)
@@ -21,8 +43,30 @@ export function PortfolioSection() {
     const [isTransitioning, setIsTransitioning] = React.useState(false)
     const [textVisible, setTextVisible] = React.useState(true)
     const [imageVisible, setImageVisible] = React.useState(true)
+    const [projects, setProjects] = React.useState<Project[]>(staticProjects)
+    const [loading, setLoading] = React.useState(true)
     const startTimeRef = React.useRef<number | null>(null)
     const rafRef = React.useRef<number | null>(null)
+
+    // Fetch projects from API
+    React.useEffect(() => {
+        async function fetchProjects() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/projects/`);
+                if (response.ok) {
+                    const apiProjects = await response.json();
+                    if (apiProjects && apiProjects.length > 0) {
+                        setProjects(apiProjects.map(transformApiProject));
+                    }
+                }
+            } catch (error) {
+                console.log('Using static data fallback');
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchProjects();
+    }, []);
 
     const currentProject = projects[currentIndex]
     const totalProjects = projects.length
@@ -103,6 +147,11 @@ export function PortfolioSection() {
             }
         }
     }, [currentIndex, isTransitioning, textVisible, imageVisible, totalProjects])
+
+    // Get the project URL - prefer slug for API projects
+    const getProjectUrl = (project: Project) => {
+        return `/projects/${project.slug || project.id}`;
+    }
 
     return (
         <section id="portfolio" className="w-full bg-white py-20 md:py-32 overflow-hidden">
@@ -203,7 +252,7 @@ export function PortfolioSection() {
                                         <span className="text-sm font-medium text-gray-500 uppercase tracking-widest mb-4 block">
                                             Проект {currentProject.number} / {String(totalProjects).padStart(2, '0')}
                                         </span>
-                                        <Link href={`/projects/${currentProject.id}`}>
+                                        <Link href={getProjectUrl(currentProject)}>
                                             <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-6 hover:underline decoration-2 underline-offset-4 decoration-black/30 transition-all">
                                                 {currentProject.title}
                                             </h3>
@@ -213,7 +262,7 @@ export function PortfolioSection() {
                                         </p>
 
                                         <Button asChild variant="outline" className="rounded-full border-black text-black hover:bg-black hover:text-white transition-colors">
-                                            <Link href={`/projects/${currentProject.id}`}>
+                                            <Link href={getProjectUrl(currentProject)}>
                                                 Смотреть проект
                                             </Link>
                                         </Button>
@@ -225,7 +274,7 @@ export function PortfolioSection() {
 
                     {/* Right side - Image */}
                     <div className="relative h-[400px] md:h-[500px] lg:h-full rounded-3xl overflow-hidden cursor-pointer group">
-                        <Link href={`/projects/${currentProject.id}`}>
+                        <Link href={getProjectUrl(currentProject)}>
                             <AnimatePresence mode="wait">
                                 {imageVisible && (
                                     <motion.div

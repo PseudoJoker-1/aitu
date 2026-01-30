@@ -2,8 +2,10 @@
 import React, { useRef, useState } from 'react'
 import { motion, useSpring, useMotionValue, useTransform } from 'motion/react'
 import Link from 'next/link'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Check, Loader2 } from 'lucide-react'
 import { FadeUp } from '@/components/ui/fade-up'
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
 const EVENT_TYPES = [
     "Корпоратив",
@@ -16,9 +18,58 @@ const EVENT_TYPES = [
 export function CTASection() {
     const [activeType, setActiveType] = useState<string | null>(null)
     const [hoveredButton, setHoveredButton] = useState(false)
+    const [phone, setPhone] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+    const [statusMessage, setStatusMessage] = useState('')
+
+    const handleSubmit = async () => {
+        if (!phone.trim()) {
+            setSubmitStatus('error')
+            setStatusMessage('Пожалуйста, введите номер телефона')
+            setTimeout(() => setSubmitStatus('idle'), 3000)
+            return
+        }
+
+        setIsSubmitting(true)
+        setSubmitStatus('idle')
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/leads/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: 'Заявка с сайта',
+                    phone: phone,
+                    event_type: activeType || 'Не указан',
+                }),
+            })
+
+            if (response.ok) {
+                setSubmitStatus('success')
+                setStatusMessage('Спасибо! Мы свяжемся с вами.')
+                setPhone('')
+                setActiveType(null)
+                setTimeout(() => setSubmitStatus('idle'), 5000)
+            } else {
+                setSubmitStatus('error')
+                setStatusMessage('Произошла ошибка. Попробуйте позже.')
+                setTimeout(() => setSubmitStatus('idle'), 3000)
+            }
+        } catch (error) {
+            console.error('Error submitting lead:', error)
+            setSubmitStatus('error')
+            setStatusMessage('Ошибка сети. Проверьте подключение.')
+            setTimeout(() => setSubmitStatus('idle'), 3000)
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
 
     return (
-        <section className="min-h-screen bg-white text-black flex flex-col justify-between relative overflow-hidden">
+        <section id="cta" className="min-h-screen bg-white text-black flex flex-col justify-between relative overflow-hidden">
 
             {/* Main Content - Centered */}
             <div className="flex-1 flex flex-col justify-center items-center px-6 w-full max-w-[1280px] mx-auto z-10">
@@ -44,7 +95,7 @@ export function CTASection() {
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: index * 0.1, duration: 0.5 }}
-                                onClick={() => setActiveType(type)}
+                                onClick={() => setActiveType(type === activeType ? null : type)}
                                 className={`px-6 md:px-8 py-3 md:py-4 rounded-full border text-base md:text-lg transition-all duration-300 ${activeType === type
                                     ? 'bg-black text-white border-black'
                                     : 'bg-white text-black border-neutral-200 hover:border-black'
@@ -56,22 +107,46 @@ export function CTASection() {
                     </div>
 
                     {/* Input */}
-                    <div className="w-full max-w-md mb-16 relative group">
+                    <div className="w-full max-w-md mb-8 relative group">
                         <input
                             type="text"
-                            placeholder="Phone or Telegram"
+                            placeholder="Телефон или Telegram"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
                             className="w-full bg-transparent border-b border-neutral-300 py-4 text-xl md:text-2xl placeholder:text-neutral-400 focus:outline-none focus:border-black transition-colors"
                         />
                     </div>
 
+                    {/* Status Message */}
+                    {submitStatus !== 'idle' && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className={`mb-8 px-6 py-3 rounded-full text-lg font-medium ${submitStatus === 'success'
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-red-100 text-red-700'
+                                }`}
+                        >
+                            {submitStatus === 'success' && <Check className="inline-block mr-2 h-5 w-5" />}
+                            {statusMessage}
+                        </motion.div>
+                    )}
+
                     {/* Magnetic Button */}
                     <MagneticButton>
                         <button
+                            onClick={handleSubmit}
+                            disabled={isSubmitting}
                             onMouseEnter={() => setHoveredButton(true)}
                             onMouseLeave={() => setHoveredButton(false)}
-                            className="relative w-48 h-48 md:w-64 md:h-64 rounded-full bg-black text-white flex flex-col items-center justify-center gap-2 group cursor-pointer"
+                            className="relative w-48 h-48 md:w-64 md:h-64 rounded-full bg-black text-white flex flex-col items-center justify-center gap-2 group cursor-pointer disabled:opacity-70"
                         >
-                            <span className="text-xl md:text-2xl font-medium relative z-10">Обсудить<br />событие</span>
+                            {isSubmitting ? (
+                                <Loader2 className="h-8 w-8 animate-spin" />
+                            ) : (
+                                <span className="text-xl md:text-2xl font-medium relative z-10">Обсудить<br />событие</span>
+                            )}
 
                             {/* Hover Blob Effect */}
                             <motion.div

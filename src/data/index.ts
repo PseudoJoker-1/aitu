@@ -1,12 +1,23 @@
 
+export interface ProjectImage {
+    id?: number;
+    image: string;
+    caption?: string;
+    order?: number;
+}
+
 export interface Project {
-    id: string;
+    id: string | number;
+    slug?: string;
     number: string;
     title: string;
     description: string;
     image: string;
-    content?: string; // For the detail page
+    images?: ProjectImage[];
+    content?: string;
+    created_at?: string;
 }
+
 
 export interface Service {
     id: string;
