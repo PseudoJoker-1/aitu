@@ -144,9 +144,10 @@ export function ServicesSection() {
                 {/* Progress Indicators - Always 5 dots for better UX */}
                 <div className="flex justify-center gap-3 mt-12">
                     {services.map((_, index) => (
-                        <div
+                        <button
                             key={index}
-                            className="h-2 w-16 bg-gray-200 rounded-[10px] overflow-hidden"
+                            onClick={() => api?.scrollTo(index)}
+                            className="h-2 w-16 bg-gray-200 rounded-[10px] overflow-hidden cursor-pointer hover:bg-gray-300 transition-colors"
                         >
                             <div
                                 className="h-full bg-black rounded-[10px]"
@@ -155,7 +156,7 @@ export function ServicesSection() {
                                     transition: index === current - 1 ? 'none' : 'width 0.3s ease'
                                 }}
                             />
-                        </div>
+                        </button>
                     ))}
                 </div>
             </div>

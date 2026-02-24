@@ -76,12 +76,12 @@ export const services: Service[] = [
     {
         id: "festivals",
         title: "Масштабные фестивали",
-        image: "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?q=80&w=1000&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1000&auto=format&fit=crop",
     },
     {
         id: "private-parties",
         title: "Частные праздники",
-        image: "https://images.unsplash.com/photo-1519671482502-9759101d4561?q=80&w=1000&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1000&auto=format&fit=crop",
     },
     {
         id: "conferences",

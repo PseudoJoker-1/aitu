@@ -105,7 +105,6 @@ const VideoBackground = () => {
                             autoPlay
                             muted
                             playsInline
-                            loop
                             preload="auto"
                             src={currentVideo}
                             className="absolute inset-0 w-full h-full object-cover origin-center"
