@@ -18,6 +18,7 @@ const EVENT_TYPES = [
 export function CTASection() {
     const [activeType, setActiveType] = useState<string | null>(null)
     const [hoveredButton, setHoveredButton] = useState(false)
+    const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
@@ -41,7 +42,7 @@ export function CTASection() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    name: 'Заявка с сайта',
+                    name: name.trim() || 'Заявка с сайта',
                     phone: phone,
                     event_type: activeType || 'Не указан',
                 }),
@@ -50,6 +51,7 @@ export function CTASection() {
             if (response.ok) {
                 setSubmitStatus('success')
                 setStatusMessage('Спасибо! Мы свяжемся с вами.')
+                setName('')
                 setPhone('')
                 setActiveType(null)
                 setTimeout(() => setSubmitStatus('idle'), 5000)
@@ -106,8 +108,15 @@ export function CTASection() {
                         ))}
                     </div>
 
-                    {/* Input */}
-                    <div className="w-full max-w-md mb-8 relative group">
+                    {/* Inputs */}
+                    <div className="w-full max-w-md mb-8 flex flex-col gap-4 relative group">
+                        <input
+                            type="text"
+                            placeholder="Ваше имя"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="w-full bg-transparent border-b border-neutral-300 py-4 text-xl md:text-2xl placeholder:text-neutral-400 focus:outline-none focus:border-black transition-colors"
+                        />
                         <input
                             type="text"
                             placeholder="Телефон или Telegram"
