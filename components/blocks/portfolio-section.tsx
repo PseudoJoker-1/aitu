@@ -18,9 +18,10 @@ const IMAGE_EXIT_TIME = 9600 // 9.6s
 
 // Transform API project to the format expected by the component
 function transformApiProject(apiProject: any, index: number): Project {
-    const firstImage = apiProject.images && apiProject.images.length > 0
-        ? apiProject.images[0].image
-        : '';
+    const firstImage = apiProject.cover_image
+        ? apiProject.cover_image
+        : (apiProject.images && apiProject.images.length > 0 ? apiProject.images[0].image : '');
+
     const imageUrl = firstImage.startsWith('http')
         ? firstImage
         : `${API_BASE_URL}${firstImage}`;
@@ -190,7 +191,7 @@ export function PortfolioSection() {
                     {/* Left side - Text with background number */}
                     <div className="relative flex flex-col justify-center">
                         {/* Massive background number with fill effect - Dual layer approach */}
-                        <div className="absolute inset-0 z-0 flex items-center justify-end pointer-events-none overflow-hidden">
+                        <div className="absolute inset-0 z-0 flex items-center justify-end pointer-events-none overflow-hidden opacity-10 md:opacity-100">
                             {/* Base layer - Gray number */}
                             <AnimatePresence mode="wait">
                                 <motion.span
@@ -202,10 +203,9 @@ export function PortfolioSection() {
                                         duration: 0.4,
                                         ease: [0.25, 0.46, 0.45, 0.94]
                                     }}
-                                    className="absolute text-[20rem] md:text-[28rem] lg:text-[32rem] font-bold leading-none select-none"
+                                    className="absolute text-[12rem] sm:text-[16rem] md:text-[24rem] lg:text-[32rem] font-bold leading-none select-none right-0 md:-right-[5%]"
                                     style={{
                                         color: '#808080',
-                                        right: '-5%'
                                     }}
                                 >
                                     {parseInt(currentProject.number).toString()}
@@ -223,11 +223,10 @@ export function PortfolioSection() {
                                         duration: 0.4,
                                         ease: [0.25, 0.46, 0.45, 0.94]
                                     }}
-                                    className="absolute text-[20rem] md:text-[28rem] lg:text-[32rem] font-bold leading-none select-none"
+                                    className="absolute text-[12rem] sm:text-[16rem] md:text-[24rem] lg:text-[32rem] font-bold leading-none select-none right-0 md:-right-[5%]"
                                     style={{
                                         color: '#000000',
                                         clipPath: `inset(${100 - progress}% 0 0 0)`,
-                                        right: '-5%'
                                     }}
                                 >
                                     {parseInt(currentProject.number).toString()}

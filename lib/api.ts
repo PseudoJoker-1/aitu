@@ -15,6 +15,7 @@ export interface Project {
     title: string;
     slug: string;
     description: string;
+    cover_image?: string;
     images: ProjectImage[];
     created_at: string;
 }

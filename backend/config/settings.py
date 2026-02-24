@@ -145,3 +145,5 @@ GREEN_API_ID_INSTANCE = os.getenv('GREEN_API_ID_INSTANCE', '')
 GREEN_API_TOKEN = os.getenv('GREEN_API_TOKEN', '')
 GREEN_API_PHONE = os.getenv('GREEN_API_PHONE', '')  # Your WhatsApp number to receive notifications
 
+# Increase max number of fields for admin with many inline images
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000

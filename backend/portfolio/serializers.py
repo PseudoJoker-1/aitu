@@ -13,7 +13,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ['id', 'title', 'slug', 'description', 'images', 'created_at']
+        fields = ['id', 'title', 'slug', 'description', 'cover_image', 'images', 'created_at']
 
 
 class LeadSerializer(serializers.ModelSerializer):

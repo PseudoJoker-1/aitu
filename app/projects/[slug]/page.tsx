@@ -1,4 +1,6 @@
 import React from 'react'
+import Image from 'next/image'
+import { VirtualGallery } from '@/components/ui/virtual-gallery'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
@@ -39,25 +41,35 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     let project = await getProjectBySlug(slug);
     let images: { image: string; caption: string }[] = [];
     let isApiProject = false;
+    let coverImage = '';
 
     if (project) {
         isApiProject = true;
+        coverImage = project.cover_image ? getImageUrl(project.cover_image) : (project.images?.[0] ? getImageUrl(project.images[0].image) : '');
         images = project.images?.map(img => ({
             image: getImageUrl(img.image),
             caption: img.caption || ''
         })) || [];
+
+        // If we have a cover image and it's not the same as the first gallery image, 
+        // add it to the front of the lightbox images array for seamless browsing.
+        // Or if we just rely on cover image being separate:
+        if (project.cover_image && (!project.images?.length || getImageUrl(project.images[0].image) !== coverImage)) {
+            images.unshift({ image: coverImage, caption: 'Главное фото' });
+        }
     } else {
         // Fallback to static data
         const staticProject = staticProjects.find((p) => p.id === slug);
         if (staticProject) {
             project = {
-                id: 0,
+                id: typeof staticProject.id === 'string' ? parseInt(staticProject.id, 10) || 0 : staticProject.id,
                 title: staticProject.title,
-                slug: staticProject.id,
+                slug: String(staticProject.id),
                 description: staticProject.description,
                 images: [],
                 created_at: ''
             };
+            coverImage = staticProject.image;
             images = [{ image: staticProject.image, caption: '' }];
         }
     }
@@ -98,13 +110,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     </FadeUp>
 
                     {/* Main Image */}
-                    {images.length > 0 && (
+                    {coverImage && (
                         <FadeUp delay={0.2}>
                             <div className="relative aspect-video w-full rounded-3xl overflow-hidden mb-12 shadow-xl">
-                                <img
-                                    src={images[0].image}
+                                <Image
+                                    src={coverImage}
                                     alt={project.title}
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    priority
+                                    unoptimized={true}
+                                    className="object-cover"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
                                 />
                             </div>
                         </FadeUp>
@@ -125,40 +141,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                                 <p className="text-xl font-medium text-black">
                                     {project.description}
                                 </p>
-                                <div className="prose prose-lg text-gray-600">
-                                    <p>
-                                        Мы внимательно подошли к каждому этапу реализации {project.title.toLowerCase()},
-                                        чтобы обеспечить максимальное вовлечение аудитории и достичь поставленных целей.
-                                    </p>
-                                </div>
                             </div>
                         </FadeUp>
                     </div>
 
                     {/* Gallery - Additional Images */}
-                    {images.length > 1 && (
+                    {images.length > 0 && (
                         <div className="mb-16">
                             <FadeUp delay={0.5}>
-                                <h3 className="text-sm font-bold uppercase tracking-widest text-neutral-400 mb-8">
-                                    Галерея
-                                </h3>
+                                <VirtualGallery
+                                    images={isApiProject && project.cover_image ? images.slice(1) : images.slice(1)}
+                                    projectName={project.title}
+                                />
                             </FadeUp>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {images.slice(1).map((img, index) => (
-                                    <FadeUp key={index} delay={0.6 + index * 0.1}>
-                                        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-                                            <img
-                                                src={img.image}
-                                                alt={img.caption || `${project.title} - Image ${index + 2}`}
-                                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                                            />
-                                        </div>
-                                        {img.caption && (
-                                            <p className="mt-2 text-sm text-gray-500">{img.caption}</p>
-                                        )}
-                                    </FadeUp>
-                                ))}
-                            </div>
                         </div>
                     )}
 
