@@ -1,15 +1,20 @@
+'use client'
+
 import React from 'react'
 import Link from 'next/link'
 import { FadeUp } from '@/components/ui/fade-up'
 import { Button } from '@/components/ui/button'
+import { useTranslation } from '@/lib/i18n'
 
 export default function AboutPage() {
+    const { t } = useTranslation()
+
     return (
         <main className="bg-white min-h-screen pt-32 pb-20">
             <div className="container mx-auto px-4 md:px-6">
                 <FadeUp>
                     <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-black mb-12 md:mb-20 tracking-tight max-w-4xl">
-                        Мы создаем события,<br />о которых говорят
+                        {t('about.title')}<br />{t('about.titleBreak')}
                     </h1>
                 </FadeUp>
 
@@ -17,10 +22,10 @@ export default function AboutPage() {
                     <FadeUp delay={0.2}>
                         <div className="text-lg md:text-xl text-gray-800 font-medium leading-relaxed">
                             <p className="mb-8">
-                                Aitu.kz — это агентство событийного маркетинга полного цикла. Мы специализируемся на создании масштабных корпоративных мероприятий, фестивалей и конференций.
+                                {t('about.p1')}
                             </p>
                             <p>
-                                Наша миссия — трансформировать задачи бизнеса в яркие эмоции и незабываемый опыт для аудитории. Мы верим, что каждое событие должно быть уникальным и решать конкретные цели.
+                                {t('about.p2')}
                             </p>
                         </div>
                     </FadeUp>
@@ -39,10 +44,10 @@ export default function AboutPage() {
                 <FadeUp delay={0.6}>
                     <div className="bg-black rounded-3xl p-8 md:p-16 text-center text-white">
                         <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                            Готовы обсудить ваш проект?
+                            {t('about.ctaTitle')}
                         </h2>
                         <p className="text-neutral-400 max-w-xl mx-auto mb-10 text-lg">
-                            Свяжитесь с нами, и мы предложим креативную концепцию для вашего следующего события.
+                            {t('about.ctaDesc')}
                         </p>
                         <Button
                             asChild
@@ -50,7 +55,7 @@ export default function AboutPage() {
                             className="h-14 px-8 rounded-full bg-white text-black font-semibold text-lg hover:bg-neutral-200 transition-colors"
                         >
                             <Link href="/#contacts">
-                                Связаться с нами
+                                {t('about.ctaButton')}
                             </Link>
                         </Button>
                     </div>

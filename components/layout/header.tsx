@@ -4,28 +4,44 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'motion/react'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Globe } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import logo from '@/img/logo.png'
 import { usePathname } from 'next/navigation'
 import { useLenis } from 'lenis/react'
-
-const menuItems = [
-    { name: 'Услуги', href: '/#directions' },
-    { name: 'Портфолио', href: '/#portfolio' },
-    { name: 'О нас', href: '/about' },
-    { name: 'Контакты', href: '/#contacts' },
-]
+import { useTranslation, localeNames, type Locale } from '@/lib/i18n'
 
 export function Header() {
     const [menuState, setMenuState] = React.useState(false)
     const [isMounted, setIsMounted] = React.useState(false)
+    const [langOpen, setLangOpen] = React.useState(false)
     const pathname = usePathname()
     const lenis = useLenis()
+    const { t, locale, setLocale } = useTranslation()
+    const langRef = React.useRef<HTMLDivElement>(null)
+
+    const menuItems = [
+        { name: t('nav.services'), href: '/#directions' },
+        { name: t('nav.portfolio'), href: '/#portfolio' },
+        { name: t('nav.about'), href: '/about' },
+        { name: t('nav.additionalServices'), href: '/services' },
+        { name: t('nav.contacts'), href: '/#contacts' },
+    ]
 
     React.useEffect(() => {
         setIsMounted(true)
+    }, [])
+
+    // Close language dropdown when clicking outside
+    React.useEffect(() => {
+        const handleClick = (e: MouseEvent) => {
+            if (langRef.current && !langRef.current.contains(e.target as Node)) {
+                setLangOpen(false)
+            }
+        }
+        document.addEventListener('mousedown', handleClick)
+        return () => document.removeEventListener('mousedown', handleClick)
     }, [])
 
     const handleLogoClick = (e: React.MouseEvent) => {
@@ -41,10 +57,15 @@ export function Header() {
             const target = document.querySelector(hash)
             if (pathname === '/' && target) {
                 e.preventDefault()
-                lenis?.scrollTo(hash)
+                lenis?.scrollTo(hash, { offset: -100 })
                 setMenuState(false)
             }
         }
+    }
+
+    const handleLanguageChange = (lang: Locale) => {
+        setLocale(lang)
+        setLangOpen(false)
     }
 
     return (
@@ -82,14 +103,14 @@ export function Header() {
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden lg:flex items-center gap-8">
-                        <ul className="flex items-center gap-8">
+                    <div className="hidden lg:flex items-center gap-6">
+                        <ul className="flex items-center gap-6">
                             {menuItems.map((item, index) => (
                                 <li key={index}>
                                     <Link
                                         href={item.href}
                                         onClick={(e) => handleAnchorClick(e, item.href)}
-                                        className="relative text-sm font-semibold text-gray-900 transition-opacity duration-200 hover:opacity-70 group"
+                                        className="relative text-sm font-semibold text-gray-900 transition-opacity duration-200 hover:opacity-70 group whitespace-nowrap"
                                     >
                                         <span>{item.name}</span>
                                         <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-gray-900 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -97,6 +118,48 @@ export function Header() {
                                 </li>
                             ))}
                         </ul>
+
+                        {/* Language Switcher */}
+                        <div className="relative" ref={langRef}>
+                            <button
+                                onClick={() => setLangOpen(!langOpen)}
+                                className="flex items-center gap-1.5 text-sm font-semibold text-gray-900 transition-opacity duration-200 hover:opacity-70 cursor-pointer px-2 py-1 rounded-full"
+                            >
+                                <Globe className="w-4 h-4" />
+                                <span>{localeNames[locale]}</span>
+                            </button>
+                            <AnimatePresence>
+                                {langOpen && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -5, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: -5, scale: 0.95 }}
+                                        transition={{ duration: 0.15 }}
+                                        className="absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-xl border overflow-hidden shadow-lg min-w-[80px]"
+                                        style={{
+                                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                            backdropFilter: 'blur(20px)',
+                                            borderColor: 'rgba(255, 255, 255, 0.3)',
+                                        }}
+                                    >
+                                        {(['ru', 'kz', 'en'] as Locale[]).map((lang) => (
+                                            <button
+                                                key={lang}
+                                                onClick={() => handleLanguageChange(lang)}
+                                                className={cn(
+                                                    "w-full px-4 py-2 text-sm font-semibold text-left transition-colors cursor-pointer",
+                                                    locale === lang
+                                                        ? "bg-black text-white"
+                                                        : "text-gray-900 hover:bg-gray-100"
+                                                )}
+                                            >
+                                                {localeNames[lang]}
+                                            </button>
+                                        ))}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
 
                     {/* CTA Button */}
@@ -109,7 +172,7 @@ export function Header() {
                                 href="/#contacts"
                                 onClick={(e) => handleAnchorClick(e, '/#contacts')}
                             >
-                                Обсудить проект
+                                {t('nav.cta')}
                             </Link>
                         </Button>
                     </div>
@@ -158,6 +221,30 @@ export function Header() {
                                         </Link>
                                     </li>
                                 ))}
+
+                                {/* Mobile Language Switcher */}
+                                <li className="pt-2 border-t border-gray-200">
+                                    <div className="flex items-center gap-2 py-2">
+                                        <Globe className="w-4 h-4 text-gray-500" />
+                                        <div className="flex gap-2">
+                                            {(['ru', 'kz', 'en'] as Locale[]).map((lang) => (
+                                                <button
+                                                    key={lang}
+                                                    onClick={() => handleLanguageChange(lang)}
+                                                    className={cn(
+                                                        "px-3 py-1 rounded-full text-sm font-semibold transition-colors cursor-pointer",
+                                                        locale === lang
+                                                            ? "bg-black text-white"
+                                                            : "text-gray-600 hover:bg-gray-100"
+                                                    )}
+                                                >
+                                                    {localeNames[lang]}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </li>
+
                                 <li className="pt-2 border-t border-gray-200">
                                     <Button
                                         asChild
@@ -170,7 +257,7 @@ export function Header() {
                                                 setMenuState(false);
                                             }}
                                         >
-                                            Обсудить проект
+                                            {t('nav.cta')}
                                         </Link>
                                     </Button>
                                 </li>

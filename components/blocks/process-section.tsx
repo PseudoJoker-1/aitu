@@ -4,12 +4,14 @@ import { motion, useScroll, useTransform, MotionValue } from 'motion/react'
 import { cn } from '@/lib/utils'
 import { FadeUp } from '@/components/ui/fade-up'
 import { processSteps } from '@/src/data'
+import { useTranslation } from '@/lib/i18n'
 
 export function ProcessSection() {
     const targetRef = useRef<HTMLDivElement>(null)
     const { scrollYProgress } = useScroll({
         target: targetRef,
     })
+    const { t } = useTranslation()
 
     // Move content horizontally based on vertical scroll
     const x = useTransform(scrollYProgress, [0, 1], ["0%", "-80%"])
@@ -44,7 +46,7 @@ export function ProcessSection() {
                 <div className="absolute top-12 left-6 md:left-12 z-20">
                     <FadeUp>
                         <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
-                            Путь к<br />событию
+                            {t('process.title')}<br />{t('process.titleBreak')}
                         </h2>
                     </FadeUp>
                 </div>
@@ -87,15 +89,10 @@ function StepItem({
     parentScrollProgress: MotionValue,
     totalSteps: number
 }) {
-    // Calculate the range of scroll execution for this specific step
-    // We want the fill to happen *as the item enters and moves to center*
-    // Simple distribution: 
-    // Step 0: 0.0 - 0.15
-    // Step 1: 0.15 - 0.30
-    // etc.
+    const { t } = useTranslation()
     const stepSize = 1 / totalSteps;
     const start = index * stepSize;
-    const end = start + (stepSize * 0.8); // Fill slightly faster than the full travel
+    const end = start + (stepSize * 0.8);
 
     const fillHeight = useTransform(parentScrollProgress, [start, end], ["0%", "100%"])
 
@@ -128,10 +125,10 @@ function StepItem({
             {/* Content */}
             <div className="max-w-md">
                 <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-5 leading-tight">
-                    {step.title}
+                    {t(step.titleKey)}
                 </h3>
                 <p className="text-base md:text-lg text-gray-700 font-light leading-relaxed">
-                    {step.description}
+                    {t(step.descriptionKey)}
                 </p>
             </div>
         </div>

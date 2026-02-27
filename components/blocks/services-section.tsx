@@ -12,11 +12,13 @@ import {
 import { Button } from "@/components/ui/button"
 import { FadeUp } from "@/components/ui/fade-up"
 import { services } from "@/src/data"
+import { useTranslation } from "@/lib/i18n"
 
 export function ServicesSection() {
     const [api, setApi] = React.useState<CarouselApi>()
     const [current, setCurrent] = React.useState(1)
     const [progress, setProgress] = React.useState(0)
+    const { t } = useTranslation()
 
     const AUTOPLAY_DURATION = 10000 // 10 seconds
 
@@ -80,7 +82,7 @@ export function ServicesSection() {
                 <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 md:mb-16 gap-6">
                     <FadeUp>
                         <h2 className="text-4xl md:text-5xl lg:text-6xl font-sans font-bold text-black tracking-tight max-w-xl">
-                            Наши направления
+                            {t('services.title')}
                         </h2>
                     </FadeUp>
 
@@ -123,7 +125,7 @@ export function ServicesSection() {
                                     <div className="absolute inset-0">
                                         <img
                                             src={service.image}
-                                            alt={service.title}
+                                            alt={t(service.titleKey)}
                                             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                                         />
                                         <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-500" />
@@ -132,7 +134,7 @@ export function ServicesSection() {
                                     {/* Content */}
                                     <div className="absolute inset-0 p-8 flex flex-col justify-end">
                                         <h3 className="text-2xl font-bold text-white leading-tight">
-                                            {service.title}
+                                            {t(service.titleKey)}
                                         </h3>
                                     </div>
                                 </div>
@@ -141,7 +143,7 @@ export function ServicesSection() {
                     </CarouselContent>
                 </Carousel>
 
-                {/* Progress Indicators - Always 5 dots for better UX */}
+                {/* Progress Indicators - Always dots for better UX */}
                 <div className="flex justify-center gap-3 mt-12">
                     {services.map((_, index) => (
                         <button

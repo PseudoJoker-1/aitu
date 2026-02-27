@@ -1,0 +1,26 @@
+
+--- Processing project: 08.06 Haval ppz ---
+Found 276 images total.
+Selected 30 images to analyze.
+    [Batch 1] Starting...
+    [Batch 2] Starting...
+    [Batch 3] Starting...
+    [Batch 4] Starting...
+    [Batch 5] Starting...
+    [Batch 6] Starting...
+Traceback (most recent call last):
+  File "C:\Users\pseud\OneDrive\Рабочий стол\Новая папка (18)\test\analyze_photos.py", line 142, in <module>
+    process_project(path, name)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\pseud\OneDrive\Рабочий стол\Новая папка (18)\test\analyze_photos.py", line 122, in process_project
+    for future in concurrent.futures.as_completed(futures):
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\Lib\concurrent\futures\_base.py", line 243, in as_completed
+    waiter.event.wait(wait_timeout)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\Lib\threading.py", line 660, in wait
+    signaled = self._cond.wait(timeout)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3312.0_x64__qbz5n2kfra8p0\Lib\threading.py", line 359, in wait
+    waiter.acquire()
+    ~~~~~~~~~~~~~~^^
+KeyboardInterrupt

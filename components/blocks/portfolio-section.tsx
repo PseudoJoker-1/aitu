@@ -8,6 +8,7 @@ import { FadeUp } from "@/components/ui/fade-up"
 import { cn } from "@/lib/utils"
 import { projects as staticProjects, Project } from "@/src/data"
 import Link from "next/link"
+import { useTranslation } from "@/lib/i18n"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
@@ -48,6 +49,7 @@ export function PortfolioSection() {
     const [loading, setLoading] = React.useState(true)
     const startTimeRef = React.useRef<number | null>(null)
     const rafRef = React.useRef<number | null>(null)
+    const { t } = useTranslation()
 
     // Fetch projects from API
     React.useEffect(() => {
@@ -149,6 +151,17 @@ export function PortfolioSection() {
         }
     }, [currentIndex, isTransitioning, textVisible, imageVisible, totalProjects])
 
+    // Get translated title/description with fallback
+    const getProjectTitle = (project: Project) => {
+        if (project.titleKey) return t(project.titleKey)
+        return project.title
+    }
+
+    const getProjectDescription = (project: Project) => {
+        if (project.descriptionKey) return t(project.descriptionKey)
+        return project.description
+    }
+
     // Get the project URL - prefer slug for API projects
     const getProjectUrl = (project: Project) => {
         return `/projects/${project.slug || project.id}`;
@@ -161,7 +174,7 @@ export function PortfolioSection() {
                 <div className="flex items-end justify-between mb-16">
                     <FadeUp>
                         <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black tracking-tight">
-                            Наши проекты
+                            {t('portfolio.title')}
                         </h2>
                     </FadeUp>
                     <div className="flex gap-4">
@@ -190,42 +203,43 @@ export function PortfolioSection() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 min-h-[500px] md:min-h-[600px]">
                     {/* Left side - Text with background number */}
                     <div className="relative flex flex-col justify-center">
-                        {/* Massive background number with fill effect - Dual layer approach */}
-                        <div className="absolute inset-0 z-0 flex items-center justify-end pointer-events-none overflow-hidden opacity-10 md:opacity-100">
-                            {/* Base layer - Gray number */}
+                        {/* Outlined watermark number — anchored bottom-right, bleeds out gracefully */}
+                        <div className="absolute inset-0 overflow-visible pointer-events-none select-none" style={{ zIndex: 0 }}>
                             <AnimatePresence mode="wait">
                                 <motion.span
-                                    key={`gray-${currentProject.id}`}
-                                    initial={{ y: 100, opacity: 0 }}
+                                    key={`outline-${currentProject.id}`}
+                                    initial={{ y: 80, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    exit={{ y: -100, opacity: 0 }}
+                                    exit={{ y: -80, opacity: 0 }}
                                     transition={{
                                         duration: 0.4,
                                         ease: [0.25, 0.46, 0.45, 0.94]
                                     }}
-                                    className="absolute text-[12rem] sm:text-[16rem] md:text-[24rem] lg:text-[32rem] font-bold leading-none select-none right-0 md:-right-[5%]"
+                                    className="absolute top-1/2 right-[0%] -translate-y-1/2 text-[12rem] sm:text-[16rem] md:text-[20rem] lg:text-[28rem] font-bold leading-none whitespace-nowrap"
                                     style={{
-                                        color: '#808080',
+                                        color: 'transparent',
+                                        WebkitTextStroke: '2px rgba(0, 0, 0, 0.08)',
                                     }}
                                 >
                                     {parseInt(currentProject.number).toString()}
                                 </motion.span>
                             </AnimatePresence>
 
-                            {/* Fill layer - Black number with clip */}
+                            {/* Fill layer — stroke darkens from bottom as progress advances */}
                             <AnimatePresence mode="wait">
                                 <motion.span
-                                    key={`black-${currentProject.id}`}
-                                    initial={{ y: 100, opacity: 0 }}
+                                    key={`fill-${currentProject.id}`}
+                                    initial={{ y: 80, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    exit={{ y: -100, opacity: 0 }}
+                                    exit={{ y: -80, opacity: 0 }}
                                     transition={{
                                         duration: 0.4,
                                         ease: [0.25, 0.46, 0.45, 0.94]
                                     }}
-                                    className="absolute text-[12rem] sm:text-[16rem] md:text-[24rem] lg:text-[32rem] font-bold leading-none select-none right-0 md:-right-[5%]"
+                                    className="absolute top-1/2 right-[0%] -translate-y-1/2 text-[12rem] sm:text-[16rem] md:text-[20rem] lg:text-[28rem] font-bold leading-none whitespace-nowrap"
                                     style={{
-                                        color: '#000000',
+                                        color: 'transparent',
+                                        WebkitTextStroke: '2px rgba(0, 0, 0, 0.25)',
                                         clipPath: `inset(${100 - progress}% 0 0 0)`,
                                     }}
                                 >
@@ -234,7 +248,7 @@ export function PortfolioSection() {
                             </AnimatePresence>
                         </div>
 
-                        {/* Text content */}
+                        {/* Text content — guaranteed above the watermark */}
                         <div className="relative z-10 max-w-md">
                             <AnimatePresence mode="wait">
                                 {textVisible && (
@@ -249,20 +263,20 @@ export function PortfolioSection() {
                                         }}
                                     >
                                         <span className="text-sm font-medium text-gray-500 uppercase tracking-widest mb-4 block">
-                                            Проект {currentProject.number} / {String(totalProjects).padStart(2, '0')}
+                                            {t('portfolio.project')} {currentProject.number} / {String(totalProjects).padStart(2, '0')}
                                         </span>
                                         <Link href={getProjectUrl(currentProject)}>
                                             <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-6 hover:underline decoration-2 underline-offset-4 decoration-black/30 transition-all">
-                                                {currentProject.title}
+                                                {getProjectTitle(currentProject)}
                                             </h3>
                                         </Link>
                                         <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                                            {currentProject.description}
+                                            {getProjectDescription(currentProject)}
                                         </p>
 
                                         <Button asChild variant="outline" className="rounded-full border-black text-black hover:bg-black hover:text-white transition-colors">
                                             <Link href={getProjectUrl(currentProject)}>
-                                                Смотреть проект
+                                                {t('portfolio.viewProject')}
                                             </Link>
                                         </Button>
                                     </motion.div>
@@ -289,7 +303,7 @@ export function PortfolioSection() {
                                     >
                                         <img
                                             src={currentProject.image}
-                                            alt={currentProject.title}
+                                            alt={getProjectTitle(currentProject)}
                                             className="w-full h-full object-cover origin-center transition-transform duration-700 group-hover:scale-105"
                                         />
                                     </motion.div>

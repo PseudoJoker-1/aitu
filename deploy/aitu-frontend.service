@@ -1,0 +1,21 @@
+# Replace /home/deploy/aitu with your actual project path
+# Replace 'deploy' with your actual system user
+
+[Unit]
+Description=Aitu.kz Next.js Frontend
+After=network.target
+
+[Service]
+User=deploy
+Group=www-data
+WorkingDirectory=/home/deploy/aitu
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=HOSTNAME=127.0.0.1
+EnvironmentFile=/home/deploy/aitu/.env.local
+ExecStart=/usr/bin/node /home/deploy/aitu/.next/standalone/server.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

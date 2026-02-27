@@ -1,39 +1,96 @@
 'use client'
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useCallback } from 'react'
 import { motion, useSpring, useMotionValue, useTransform } from 'motion/react'
 import Link from 'next/link'
 import { ArrowUpRight, Check, Loader2 } from 'lucide-react'
 import { FadeUp } from '@/components/ui/fade-up'
+import { useTranslation } from '@/lib/i18n'
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
-const EVENT_TYPES = [
-    "Корпоратив",
-    "Конференция",
-    "Тимбилдинг",
-    "Фестиваль",
-    "Другое"
-]
+// Format raw digits (max 10, without leading 7) into +7 (XXX) XXX-XX-XX
+function formatPhoneDisplay(digits: string): string {
+    if (digits.length === 0) return '+7'
+    let result = '+7 ('
+    result += digits.substring(0, 3)
+    if (digits.length >= 3) result += ') '
+    else return result
+    result += digits.substring(3, 6)
+    if (digits.length >= 6) result += '-'
+    else return result
+    result += digits.substring(6, 8)
+    if (digits.length >= 8) result += '-'
+    else return result
+    result += digits.substring(8, 10)
+    return result
+}
 
 export function CTASection() {
     const [activeType, setActiveType] = useState<string | null>(null)
     const [hoveredButton, setHoveredButton] = useState(false)
     const [name, setName] = useState('')
-    const [phone, setPhone] = useState('')
+    // Store raw digits only (without country code 7)
+    const [phoneDigits, setPhoneDigits] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
     const [statusMessage, setStatusMessage] = useState('')
+    const [phoneFocused, setPhoneFocused] = useState(false)
+    const { t } = useTranslation()
+    const phoneInputRef = useRef<HTMLInputElement>(null)
+
+    const EVENT_TYPES = [
+        t('cta.corporate'),
+        t('cta.conference'),
+        t('cta.teambuilding'),
+        t('cta.festival'),
+        t('cta.exhibition'),
+        t('cta.carPresentation'),
+        t('cta.dealershipOpening'),
+        t('cta.birthday'),
+        t('cta.wedding'),
+        t('cta.kyzUzatu'),
+        t('cta.other'),
+    ]
+
+    const phoneDisplay = (phoneFocused || phoneDigits.length > 0) ? formatPhoneDisplay(phoneDigits) : ''
+
+    const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const input = e.target.value
+        // Extract only digits from the input
+        const allDigits = input.replace(/\D/g, '')
+        // Remove leading country code '7' if present
+        let raw = allDigits
+        if (raw.startsWith('7')) {
+            raw = raw.substring(1)
+        }
+        // Limit to 10 digits
+        setPhoneDigits(raw.substring(0, 10))
+    }, [])
+
+    const handlePhoneKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleSubmit()
+            return
+        }
+        // Allow Backspace to delete digits
+        if (e.key === 'Backspace') {
+            e.preventDefault()
+            setPhoneDigits(prev => prev.slice(0, -1))
+        }
+    }, [])
 
     const handleSubmit = async () => {
-        if (!phone.trim()) {
+        if (phoneDigits.length < 10) {
             setSubmitStatus('error')
-            setStatusMessage('Пожалуйста, введите номер телефона')
+            setStatusMessage(t('cta.phoneRequired'))
             setTimeout(() => setSubmitStatus('idle'), 3000)
             return
         }
 
         setIsSubmitting(true)
         setSubmitStatus('idle')
+
+        const fullPhone = '+7' + phoneDigits
 
         try {
             const response = await fetch(`${API_BASE_URL}/api/leads/`, {
@@ -42,28 +99,28 @@ export function CTASection() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    name: name.trim() || 'Заявка с сайта',
-                    phone: phone,
-                    event_type: activeType || 'Не указан',
+                    name: name.trim() || t('cta.defaultName'),
+                    phone: fullPhone,
+                    event_type: activeType || t('cta.notSpecified'),
                 }),
             })
 
             if (response.ok) {
                 setSubmitStatus('success')
-                setStatusMessage('Спасибо! Мы свяжемся с вами.')
+                setStatusMessage(t('cta.success'))
                 setName('')
-                setPhone('')
+                setPhoneDigits('')
                 setActiveType(null)
                 setTimeout(() => setSubmitStatus('idle'), 5000)
             } else {
                 setSubmitStatus('error')
-                setStatusMessage('Произошла ошибка. Попробуйте позже.')
+                setStatusMessage(t('cta.error'))
                 setTimeout(() => setSubmitStatus('idle'), 3000)
             }
         } catch (error) {
             console.error('Error submitting lead:', error)
             setSubmitStatus('error')
-            setStatusMessage('Ошибка сети. Проверьте подключение.')
+            setStatusMessage(t('cta.networkError'))
             setTimeout(() => setSubmitStatus('idle'), 3000)
         } finally {
             setIsSubmitting(false)
@@ -71,7 +128,7 @@ export function CTASection() {
     }
 
     return (
-        <section id="cta" className="min-h-screen bg-white text-black flex flex-col justify-between relative overflow-hidden">
+        <section id="contacts" className="min-h-screen bg-white text-black flex flex-col justify-between relative overflow-hidden">
 
             {/* Main Content - Centered */}
             <div className="flex-1 flex flex-col justify-center items-center px-6 w-full max-w-[1280px] mx-auto z-10">
@@ -85,7 +142,7 @@ export function CTASection() {
                 >
                     <FadeUp>
                         <h2 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter mb-12 md:mb-16">
-                            Начнем ваш<br />проект?
+                            {t('cta.title')}<br />{t('cta.titleBreak')}
                         </h2>
                     </FadeUp>
 
@@ -112,18 +169,22 @@ export function CTASection() {
                     <div className="w-full max-w-md mb-8 flex flex-col gap-4 relative group">
                         <input
                             type="text"
-                            placeholder="Ваше имя"
+                            placeholder={t('cta.namePlaceholder')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="w-full bg-transparent border-b border-neutral-300 py-4 text-xl md:text-2xl placeholder:text-neutral-400 focus:outline-none focus:border-black transition-colors"
                         />
                         <input
-                            type="text"
-                            placeholder="Телефон или Telegram"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-                            className="w-full bg-transparent border-b border-neutral-300 py-4 text-xl md:text-2xl placeholder:text-neutral-400 focus:outline-none focus:border-black transition-colors"
+                            ref={phoneInputRef}
+                            type="tel"
+                            inputMode="numeric"
+                            placeholder="+7 (___) ___-__-__"
+                            value={phoneDisplay}
+                            onChange={handlePhoneChange}
+                            onKeyDown={handlePhoneKeyDown}
+                            onFocus={() => setPhoneFocused(true)}
+                            onBlur={() => { if (phoneDigits.length === 0) setPhoneFocused(false) }}
+                            className="w-full bg-transparent border-b border-neutral-300 py-4 text-xl md:text-2xl placeholder:text-neutral-400 focus:outline-none focus:border-black transition-colors tracking-wide"
                         />
                     </div>
 
@@ -154,7 +215,7 @@ export function CTASection() {
                             {isSubmitting ? (
                                 <Loader2 className="h-8 w-8 animate-spin" />
                             ) : (
-                                <span className="text-xl md:text-2xl font-medium relative z-10">Обсудить<br />событие</span>
+                                <span className="text-xl md:text-2xl font-medium relative z-10">{t('cta.submit')}<br />{t('cta.submitBreak')}</span>
                             )}
 
                             {/* Hover Blob Effect */}
@@ -176,8 +237,8 @@ export function CTASection() {
                     className="flex flex-col items-center gap-8 mt-16 mb-24"
                 >
                     <div className="text-center">
-                        <h3 className="text-6xl md:text-8xl font-bold text-neutral-200 select-none">ИЛИ</h3>
-                        <p className="text-neutral-500 font-medium mt-2">связаться с нами в</p>
+                        <h3 className="text-6xl md:text-8xl font-bold text-neutral-200 select-none">{t('cta.or')}</h3>
+                        <p className="text-neutral-500 font-medium mt-2">{t('cta.orSub')}</p>
                     </div>
 
                     <MagneticButton>

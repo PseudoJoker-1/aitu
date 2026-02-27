@@ -53,11 +53,33 @@ class ProjectImageInline(admin.TabularInline):
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     form = ProjectAdminForm
-    list_display = ('title', 'slug', 'created_at')
+    list_display = ('title', 'slug', 'image_count', 'created_at')
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('title', 'description')
     list_filter = ('created_at',)
     inlines = [ProjectImageInline]
+    actions = ['delete_all_photos']
+
+    @admin.display(description='Фото')
+    def image_count(self, obj):
+        return obj.images.count()
+
+    @admin.action(description='🗑️ Удалить все фото у выбранных проектов')
+    def delete_all_photos(self, request, queryset):
+        total = 0
+        for project in queryset:
+            images = project.images.all()
+            count = images.count()
+            # Delete actual files from storage
+            for img in images:
+                if img.image:
+                    img.image.delete(save=False)
+            # Delete cover image too
+            if project.cover_image:
+                project.cover_image.delete(save=False)
+            images.delete()
+            total += count
+        self.message_user(request, f'Удалено {total} фото из {queryset.count()} проект(ов).')
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)

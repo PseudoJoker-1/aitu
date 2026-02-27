@@ -2,6 +2,7 @@ import requests
 from django.conf import settings
 from rest_framework import viewsets, mixins, status
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from .models import Project, Lead
 from .serializers import ProjectSerializer, LeadSerializer
 
@@ -24,6 +25,8 @@ class LeadViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     queryset = Lead.objects.all()
     serializer_class = LeadSerializer
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'leads'
 
     def perform_create(self, serializer):
         lead = serializer.save()

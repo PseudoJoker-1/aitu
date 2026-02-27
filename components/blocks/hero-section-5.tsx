@@ -18,6 +18,7 @@ import mceLogo from '@/img/MCE.png'
 import olympLogo from '@/img/OLYMP.png'
 import allurLogo from '@/img/allur.png'
 import roxLogo from '@/img/rox.png'
+import { useTranslation } from '@/lib/i18n'
 
 const COMPANY_LOGOS = [
     { src: akimatLogo, alt: 'Akimat' },
@@ -123,6 +124,8 @@ const VideoBackground = () => {
 }
 
 export function HeroSection() {
+    const { t } = useTranslation()
+
     return (
         <main className="overflow-x-hidden">
             <section className="relative overflow-hidden bg-white">
@@ -135,7 +138,7 @@ export function HeroSection() {
                             {/* Text Content - Bottom Left */}
                             <div className="absolute bottom-0 left-0 z-20 p-8 md:p-10 lg:p-12">
                                 <FadeUp className="max-w-2xl text-balance text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 drop-shadow-2xl">
-                                    Создаем незабываемые события
+                                    {t('hero.title')}
                                 </FadeUp>
 
                                 <div className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -148,7 +151,7 @@ export function HeroSection() {
                                         }}
                                     >
                                         <Link href="/#directions">
-                                            <span className="text-nowrap">Наши услуги</span>
+                                            <span className="text-nowrap">{t('hero.cta')}</span>
                                             <ChevronRight className="ml-1" />
                                         </Link>
                                     </Button>
@@ -168,7 +171,7 @@ export function HeroSection() {
                             viewport={{ once: true }}
                             className="text-[12px] uppercase font-semibold tracking-[0.2em] text-[#888888] mb-10"
                         >
-                            НАМ ДОВЕРЯЮТ
+                            {t('hero.trusted')}
                         </motion.p>
 
                         <div className="relative py-6 w-full">
