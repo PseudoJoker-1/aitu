@@ -15,9 +15,9 @@ export function Footer() {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-8">
                     {/* Contact info */}
                     <div className="flex flex-col sm:flex-row gap-6">
-                        <a href="mailto:z_ardak_kz@bk.ru" className="flex items-center gap-2 text-neutral-600 hover:text-black transition-colors">
+                        <a href="mailto:aitu.kzevents@mail.ru" className="flex items-center gap-2 text-neutral-600 hover:text-black transition-colors">
                             <Mail className="w-4 h-4" />
-                            <span>z_ardak_kz@bk.ru</span>
+                            <span>aitu.kzevents@mail.ru</span>
                         </a>
                         <a href="tel:+77026338118" className="flex items-center gap-2 text-neutral-600 hover:text-black transition-colors">
                             <Phone className="w-4 h-4" />

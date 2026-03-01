@@ -141,7 +141,7 @@ export const translations: Record<Locale, Record<string, TranslationValue>> = {
         'addServices.ctaButton': 'Связаться с нами',
 
         // Footer
-        'footer.email': 'z_ardak_kz@bk.ru',
+        'footer.email': 'aitu.kzevents@mail.ru',
         'footer.phone': '+7 702 633 8118',
         'footer.copyright': '© 2026 aituevents.kz. Все права защищены.',
     },
@@ -278,7 +278,7 @@ export const translations: Record<Locale, Record<string, TranslationValue>> = {
         'addServices.ctaButton': 'Бізбен байланысу',
 
         // Footer
-        'footer.email': 'z_ardak_kz@bk.ru',
+        'footer.email': 'aitu.kzevents@mail.ru',
         'footer.phone': '+7 702 633 8118',
         'footer.copyright': '© 2026 aituevents.kz. Барлық құқықтар қорғалған.',
     },
@@ -415,7 +415,7 @@ export const translations: Record<Locale, Record<string, TranslationValue>> = {
         'addServices.ctaButton': 'Contact Us',
 
         // Footer
-        'footer.email': 'z_ardak_kz@bk.ru',
+        'footer.email': 'aitu.kzevents@mail.ru',
         'footer.phone': '+7 702 633 8118',
         'footer.copyright': '© 2026 aituevents.kz. All rights reserved.',
     },
