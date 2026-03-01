@@ -30,8 +30,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files (secrets — never commit)
+.env.local
+backend/.env
 
 # vercel
 .vercel
@@ -48,3 +49,8 @@ backend/staticfiles/
 backend/logs/
 __pycache__/
 *.pyc
+
+# temp/debug files
+lint_output.txt
+output.log
+deploy_check.txt

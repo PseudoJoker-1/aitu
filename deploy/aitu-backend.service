@@ -1,16 +1,13 @@
-# Replace /home/deploy/aitu with your actual project path
-# Replace 'deploy' with your actual system user
-
 [Unit]
 Description=Aitu.kz Django Backend (Gunicorn)
 After=network.target
 
 [Service]
-User=deploy
+User=__DEPLOY_USER__
 Group=www-data
-WorkingDirectory=/home/deploy/aitu/backend
-EnvironmentFile=/home/deploy/aitu/backend/.env
-ExecStart=/home/deploy/aitu/backend/venv/bin/gunicorn config.wsgi:application -c /home/deploy/aitu/deploy/gunicorn.conf.py
+WorkingDirectory=__PROJECT_DIR__/backend
+EnvironmentFile=__PROJECT_DIR__/backend/.env
+ExecStart=__PROJECT_DIR__/backend/venv/bin/gunicorn config.wsgi:application -c __PROJECT_DIR__/deploy/gunicorn.conf.py
 ExecReload=/bin/kill -s HUP $MAINPID
 Restart=on-failure
 RestartSec=5
