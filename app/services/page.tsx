@@ -4,7 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import { FadeUp } from '@/components/ui/fade-up'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Volume2, Palette, Camera } from 'lucide-react'
+import { ArrowRight, Volume2, Palette, Camera, Globe } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n'
 
 const SERVICES_DATA = [
@@ -43,6 +43,18 @@ const SERVICES_DATA = [
             'addServices.photoVideo.f4',
         ],
         image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000&auto=format&fit=crop',
+    },
+    {
+        icon: Globe,
+        titleKey: 'addServices.webDev.title',
+        descKey: 'addServices.webDev.desc',
+        features: [
+            'addServices.webDev.f1',
+            'addServices.webDev.f2',
+            'addServices.webDev.f3',
+            'addServices.webDev.f4',
+        ],
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop',
     },
 ]
 

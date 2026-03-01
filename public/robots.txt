@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+
+# Sitemap
+Sitemap: https://aituevents.kz/sitemap.xml
+
+# Crawl-delay (be polite to bots)
+Crawl-delay: 1

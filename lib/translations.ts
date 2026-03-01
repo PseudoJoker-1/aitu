@@ -95,7 +95,7 @@ export const translations: Record<Locale, Record<string, TranslationValue>> = {
         // About
         'about.title': 'Мы создаем события,',
         'about.titleBreak': 'о которых говорят',
-        'about.p1': 'Aitu.kz — это агентство событийного маркетинга полного цикла. Мы специализируемся на создании масштабных корпоративных мероприятий, фестивалей и конференций.',
+        'about.p1': 'Aituevents.kz — это агентство событийного маркетинга полного цикла. Мы специализируемся на создании масштабных корпоративных мероприятий, фестивалей и конференций.',
         'about.p2': 'Наша миссия — трансформировать задачи бизнеса в яркие эмоции и незабываемый опыт для аудитории. Мы верим, что каждое событие должно быть уникальным и решать конкретные цели.',
         'about.ctaTitle': 'Готовы обсудить ваш проект?',
         'about.ctaDesc': 'Свяжитесь с нами, и мы предложим креативную концепцию для вашего следующего события.',
@@ -130,9 +130,20 @@ export const translations: Record<Locale, Record<string, TranslationValue>> = {
         'addServices.photoVideo.f2': 'Видеосъёмка Full HD / 4K',
         'addServices.photoVideo.f3': 'Аэросъёмка дроном',
         'addServices.photoVideo.f4': 'Монтаж и постпродакшн',
+        'addServices.webDev.title': 'Разработка сайта',
+        'addServices.webDev.desc': 'Создание современных и функциональных веб-сайтов для вашего бизнеса. От лендингов до сложных корпоративных порталов — мы разрабатываем решения, которые работают на результат.',
+        'addServices.webDev.f1': 'Корпоративные сайты',
+        'addServices.webDev.f2': 'Лендинги и промо-страницы',
+        'addServices.webDev.f3': 'Интернет-магазины',
+        'addServices.webDev.f4': 'SEO-оптимизация и аналитика',
         'addServices.ctaTitle': 'Нужна дополнительная услуга?',
         'addServices.ctaDesc': 'Свяжитесь с нами, и мы подберем оптимальное решение для вашего мероприятия.',
         'addServices.ctaButton': 'Связаться с нами',
+
+        // Footer
+        'footer.email': 'z_ardak_kz@bk.ru',
+        'footer.phone': '+7 702 633 8118',
+        'footer.copyright': '© 2026 aituevents.kz. Все права защищены.',
     },
 
     kz: {
@@ -221,7 +232,7 @@ export const translations: Record<Locale, Record<string, TranslationValue>> = {
         // About
         'about.title': 'Біз оқиғалар жасаймыз,',
         'about.titleBreak': 'ол туралы айтады',
-        'about.p1': 'Aitu.kz — толық циклді іс-шара маркетинг агенттігі. Біз ауқымды корпоративтік іс-шараларды, фестивальдар мен конференцияларды жасауға маманданамыз.',
+        'about.p1': 'Aituevents.kz — толық циклді іс-шара маркетинг агенттігі. Біз ауқымды корпоративтік іс-шараларды, фестивальдар мен конференцияларды жасауға маманданамыз.',
         'about.p2': 'Біздің миссиямыз — бизнес міндеттерін аудитория үшін жарқын эмоциялар мен ұмытылмас тәжірибеге айналдыру. Біз әр оқиғаның бірегей болуы және нақты мақсаттарды шешуі керек деп сенеміз.',
         'about.ctaTitle': 'Жобаңызды талқылауға дайынсыз ба?',
         'about.ctaDesc': 'Бізбен хабарласыңыз, біз келесі оқиғаңыз үшін креативті тұжырымдаманы ұсынамыз.',
@@ -256,9 +267,20 @@ export const translations: Record<Locale, Record<string, TranslationValue>> = {
         'addServices.photoVideo.f2': 'Full HD / 4K бейнетүсіру',
         'addServices.photoVideo.f3': 'Дронмен аэросъемка',
         'addServices.photoVideo.f4': 'Монтаж және постпродакшн',
+        'addServices.webDev.title': 'Сайт әзірлеу',
+        'addServices.webDev.desc': 'Бизнесіңіз үшін заманауи және функционалды веб-сайттар жасау. Лендингтерден күрделі корпоративтік порталдарға дейін — біз нәтижеге бағытталған шешімдер жасаймыз.',
+        'addServices.webDev.f1': 'Корпоративтік сайттар',
+        'addServices.webDev.f2': 'Лендингтер мен промо-беттер',
+        'addServices.webDev.f3': 'Интернет-дүкендер',
+        'addServices.webDev.f4': 'SEO-оптимизация және аналитика',
         'addServices.ctaTitle': 'Қосымша қызмет қажет пе?',
         'addServices.ctaDesc': 'Бізбен хабарласыңыз, іс-шараңыз үшін оңтайлы шешім таңдаймыз.',
         'addServices.ctaButton': 'Бізбен байланысу',
+
+        // Footer
+        'footer.email': 'z_ardak_kz@bk.ru',
+        'footer.phone': '+7 702 633 8118',
+        'footer.copyright': '© 2026 aituevents.kz. Барлық құқықтар қорғалған.',
     },
 
     en: {
@@ -347,7 +369,7 @@ export const translations: Record<Locale, Record<string, TranslationValue>> = {
         // About
         'about.title': 'We create events',
         'about.titleBreak': 'people talk about',
-        'about.p1': 'Aitu.kz is a full-cycle event marketing agency. We specialize in creating large-scale corporate events, festivals and conferences.',
+        'about.p1': 'Aituevents.kz is a full-cycle event marketing agency. We specialize in creating large-scale corporate events, festivals and conferences.',
         'about.p2': 'Our mission is to transform business objectives into vivid emotions and unforgettable experiences for the audience. We believe every event should be unique and solve specific goals.',
         'about.ctaTitle': 'Ready to discuss your project?',
         'about.ctaDesc': 'Contact us and we\'ll propose a creative concept for your next event.',
@@ -382,8 +404,19 @@ export const translations: Record<Locale, Record<string, TranslationValue>> = {
         'addServices.photoVideo.f2': 'Full HD / 4K Videography',
         'addServices.photoVideo.f3': 'Drone Aerial Shots',
         'addServices.photoVideo.f4': 'Editing & Post-production',
+        'addServices.webDev.title': 'Website Development',
+        'addServices.webDev.desc': 'Creating modern and functional websites for your business. From landing pages to complex corporate portals — we develop solutions that deliver results.',
+        'addServices.webDev.f1': 'Corporate Websites',
+        'addServices.webDev.f2': 'Landing & Promo Pages',
+        'addServices.webDev.f3': 'E-commerce Stores',
+        'addServices.webDev.f4': 'SEO Optimization & Analytics',
         'addServices.ctaTitle': 'Need an additional service?',
         'addServices.ctaDesc': 'Contact us and we\'ll find the optimal solution for your event.',
         'addServices.ctaButton': 'Contact Us',
+
+        // Footer
+        'footer.email': 'z_ardak_kz@bk.ru',
+        'footer.phone': '+7 702 633 8118',
+        'footer.copyright': '© 2026 aituevents.kz. All rights reserved.',
     },
 }

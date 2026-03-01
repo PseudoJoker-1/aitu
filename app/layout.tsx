@@ -17,8 +17,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Aitu.kz — Event Agency",
-  description: "Создаем незабываемые события",
+  title: "Aituevents.kz — Ивент-агентство | Организация мероприятий в Казахстане",
+  description: "Aituevents.kz — агентство событийного маркетинга полного цикла. Корпоративы, конференции, свадьбы, фестивали, разработка сайтов. Астана, Алматы, Казахстан.",
+  keywords: "ивент агентство, организация мероприятий, корпоратив, конференция, свадьба, фестиваль, Казахстан, Астана, Алматы, aituevents.kz, разработка сайтов",
+  metadataBase: new URL("https://aituevents.kz"),
+  openGraph: {
+    title: "Aituevents.kz — Ивент-агентство",
+    description: "Создаем незабываемые события. Корпоративы, конференции, свадьбы, фестивали.",
+    url: "https://aituevents.kz",
+    siteName: "Aituevents.kz",
+    type: "website",
+    locale: "ru_KZ",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: "https://aituevents.kz",
+  },
 };
 
 export default function RootLayout({
